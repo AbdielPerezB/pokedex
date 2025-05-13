@@ -25,11 +25,7 @@ export class PokermonService {
       const pokemon = await this.pokemonModel.create(createPokermonDto) //agregamos en la db
       return pokemon;
     } catch (error) {
-      if (error.code === 11000) {
-        throw new BadRequestException(`Pokemon exists in db. ${JSON.stringify(error.keyValue)}`);
-      }
-      console.log(error);
-      throw new InternalServerErrorException(`Can't create Pokemon - Check server logs`);
+      this.handleExceptions(error);
     }
   }
 
@@ -38,7 +34,7 @@ export class PokermonService {
   }
 
   async findOne(term: string) {
-    let pokemon: Pokemon|null = null;
+    let pokemon: Pokemon | null = null;
 
     //búsqueda por no
     if (!isNaN(+term)) {
@@ -46,13 +42,13 @@ export class PokermonService {
     }
 
     //MongoID. isValidObjectId, ya viene con Mongoose
-    if(!pokemon && isValidObjectId(term)){
+    if (!pokemon && isValidObjectId(term)) {
       pokemon = await this.pokemonModel.findById(term);
     }
 
     //Name
-    if(!pokemon){
-      pokemon = await this.pokemonModel.findOne({name: term.toLocaleLowerCase()})
+    if (!pokemon) {
+      pokemon = await this.pokemonModel.findOne({ name: term.toLocaleLowerCase() })
     }
 
 
@@ -60,11 +56,41 @@ export class PokermonService {
     return pokemon;
   }
 
-  update(term: number, updatePokermonDto: UpdatePokermonDto) {
-    return `This action updates a #${term} pokermon`;
+  async update(term: string, updatePokermonDto: UpdatePokermonDto) {
+
+    //Ete pokemos es el objeto direco de Mongoose
+    const pokemon = await this.findOne(term)
+
+    //guardamos nombre en minuscula:
+    if (updatePokermonDto.name) updatePokermonDto.name = updatePokermonDto.name.toLocaleLowerCase();
+
+    //gardamos en db
+    try {
+      await pokemon.updateOne(updatePokermonDto, { new: true }); //el new no sé pa que es. investigar
+    } catch (error) {
+      this.handleExceptions(error);
+    }
+    return { ...pokemon.toJSON(), ...UpdatePokermonDto };
+    //En realidad el pokemon si se actualizó, solo que no se reflejan al instante
+    //los datos, por ello, retornamos el objeto pokemon.toJSON(), que tiene datos antiguos,
+    //y le sobreescribimos UpdatePokemonDto, el cual tiene los valores nuevos y eso
+    //le mandamos al usuario
+
   }
 
   remove(term: number) {
     return `This action removes a #${term} pokermon`;
   }
+
+
+  private handleExceptions(error: any){
+    //si el algun dato del pokemon ya existe porque deben ser únicos
+    if (error.code === 11000) { //el error 11000 nos dice que un campo y aestá repetido
+      throw new BadRequestException(`Pokemon with atributte ${JSON.stringify(error.keyValue)} already exists in db`);
+    }
+    console.log(error);
+    throw new InternalServerErrorException(`Can't create Pokemon - Check server logs`);
+  }
+
+  
 }

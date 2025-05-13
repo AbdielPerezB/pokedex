@@ -23,13 +23,13 @@ export class PokermonController {
     return this.pokermonService.findOne(term);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePokermonDto: UpdatePokermonDto) {
-    return this.pokermonService.update(+id, updatePokermonDto);
+  @Patch(':term')
+  update(@Param('term') term: string, @Body() updatePokermonDto: UpdatePokermonDto) {
+    return this.pokermonService.update(term, updatePokermonDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.pokermonService.remove(+id);
+  @Delete(':term')
+  remove(@Param('term') term: string) {
+    return this.pokermonService.remove(+term);
   }
 }
