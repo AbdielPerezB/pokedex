@@ -79,13 +79,33 @@ export class PokermonService {
   }
 
   async remove(id: string) {
-    const pokemon = await this.findOne(id);
 
-    await pokemon.deleteOne();
+    //esto era cuando podíamos eliminar por id, nombre o no
+    // const pokemon = await this.findOne(id);
+    // await pokemon.deleteOne();
+
+    //Ahora después de nuestro Pipe personalizado podemos utilizar los métodos 
+    //de eliminación que ya trae Mongoose
+    // const result = await this.pokemonModel.findByIdAndDelete(id); //Esto esta bien pero si no se encuentra el objeto, aún así devuelve un 200, esto hace que el usuario tenga un falso positivo
+
+    // Para solucionar eso utilizamos el siguiente métododo
+    // const result = await this.pokemonModel.deleteOne({ _id: id });
+    //esto da como resultado:
+    /*
+    {
+      "acknowledged": true,
+      "deletedCount": 0
+    }
+    */
+  //  Por lo tanto, usamos desestructuración y utilizamos deletedCount a nuestro favor:
+    const { deletedCount } = await this.pokemonModel.deleteOne({_id: id});
+    if (deletedCount === 0)
+      throw new BadRequestException(`Pokemon with ${id} not found`)
+    return;
   }
 
 
-  private handleExceptions(error: any){
+  private handleExceptions(error: any) {
     //si el algun dato del pokemon ya existe porque deben ser únicos
     if (error.code === 11000) { //el error 11000 nos dice que un campo y aestá repetido
       throw new BadRequestException(`Pokemon with atributte ${JSON.stringify(error.keyValue)} already exists in db`);
@@ -94,5 +114,5 @@ export class PokermonService {
     throw new InternalServerErrorException(`Can't create Pokemon - Check server logs`);
   }
 
-  
+
 }

@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus
 import { PokermonService } from './pokemon.service';
 import { CreatePokermonDto } from './dto/create-pokermon.dto';
 import { UpdatePokermonDto } from './dto/update-pokermon.dto';
+import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id/parse-mongo-id.pipe';
 
 @Controller('pokemon')
 export class PokermonController {
@@ -29,7 +30,7 @@ export class PokermonController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseMongoIdPipe) id: string) {
     return this.pokermonService.remove(id);
   }
 }
