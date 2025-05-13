@@ -22,3 +22,7 @@ docker compose up -d
 ## Stack usado
 * Mongo DB
 * Nest
+
+## Docs de tecnologías:
+* [Servir contenido estático: serve-static](https://docs.nestjs.com/recipes/serve-static#configuration)
+* [MongoDB con NestJS](https://docs.nestjs.com/techniques/mongodb)
