@@ -28,8 +28,8 @@ export class PokermonController {
     return this.pokermonService.update(term, updatePokermonDto);
   }
 
-  @Delete(':term')
-  remove(@Param('term') term: string) {
-    return this.pokermonService.remove(+term);
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.pokermonService.remove(id);
   }
 }

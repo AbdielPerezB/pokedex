@@ -78,8 +78,10 @@ export class PokermonService {
 
   }
 
-  remove(term: number) {
-    return `This action removes a #${term} pokermon`;
+  async remove(id: string) {
+    const pokemon = await this.findOne(id);
+
+    await pokemon.deleteOne();
   }
 
 
