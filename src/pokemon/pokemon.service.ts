@@ -1,5 +1,5 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { Model } from 'mongoose';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { isValidObjectId, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { CreatePokermonDto } from './dto/create-pokermon.dto';
@@ -24,8 +24,8 @@ export class PokermonService {
     try {
       const pokemon = await this.pokemonModel.create(createPokermonDto) //agregamos en la db
       return pokemon;
-    } catch (error){
-      if (error.code === 11000){
+    } catch (error) {
+      if (error.code === 11000) {
         throw new BadRequestException(`Pokemon exists in db. ${JSON.stringify(error.keyValue)}`);
       }
       console.log(error);
@@ -37,15 +37,34 @@ export class PokermonService {
     return { message: 'This action adds a new pokermon' };
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} pokermon`;
+  async findOne(term: string) {
+    let pokemon: Pokemon|null = null;
+
+    //búsqueda por no
+    if (!isNaN(+term)) {
+      pokemon = await this.pokemonModel.findOne({ no: term }); // función de la db
+    }
+
+    //MongoID. isValidObjectId, ya viene con Mongoose
+    if(!pokemon && isValidObjectId(term)){
+      pokemon = await this.pokemonModel.findById(term);
+    }
+
+    //Name
+    if(!pokemon){
+      pokemon = await this.pokemonModel.findOne({name: term.toLocaleLowerCase()})
+    }
+
+
+    if (!pokemon) throw new NotFoundException(`Pokemon with no, name or id "${term}" not found`);
+    return pokemon;
   }
 
-  update(id: number, updatePokermonDto: UpdatePokermonDto) {
-    return `This action updates a #${id} pokermon`;
+  update(term: number, updatePokermonDto: UpdatePokermonDto) {
+    return `This action updates a #${term} pokermon`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} pokermon`;
+  remove(term: number) {
+    return `This action removes a #${term} pokermon`;
   }
 }

@@ -18,9 +18,9 @@ export class PokermonController {
     return this.pokermonService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.pokermonService.findOne(id);
+  @Get(':term')
+  findOne(@Param('term') term: string) {
+    return this.pokermonService.findOne(term);
   }
 
   @Patch(':id')
