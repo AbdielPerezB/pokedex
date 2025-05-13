@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { PokermonModule } from './pokermon/pokermon.module';
+import { PokermonModule } from './pokemon/pokemon.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -10,6 +11,9 @@ import { PokermonModule } from './pokermon/pokermon.module';
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/app'//Para que se sirva en localhost:3000/app
     }),
+
+    //referencia a DB
+    MongooseModule.forRoot('mongodb://localhost:27017/nest-pokemon'),
     PokermonModule
   ],
   controllers: [],

@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PokermonService } from './pokermon.service';
+import { PokermonService } from './pokemon.service';
 import { CreatePokermonDto } from './dto/create-pokermon.dto';
 import { UpdatePokermonDto } from './dto/update-pokermon.dto';
 
