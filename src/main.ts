@@ -14,8 +14,10 @@ async function bootstrap() {
       whitelist: true, //Hace que solo reciba la data que yo defina en mi DTO
       forbidNonWhitelisted: true, //Bad Request si viene data no definida en DTO
       transformOptions: {
-        exposeUnsetFields: false //Si un key del DTO es undefined, no se incluye
-      }
+        exposeUnsetFields: false, //Si un key del DTO es undefined, no se incluye
+        enableImplicitConversion:true//junto con tansform, convierte el tipo al dato definido en el DTO
+      },
+      transform:true //Me transforma los datos en el tipo de dato definido en el DTO
     })
   );
 

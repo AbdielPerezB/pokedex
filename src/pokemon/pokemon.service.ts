@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreatePokermonDto } from './dto/create-pokermon.dto';
 import { UpdatePokermonDto } from './dto/update-pokermon.dto';
 import { Pokemon } from './entities/pokemon.entity';
+import { PaginationDTO } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class PokermonService {
@@ -29,8 +30,15 @@ export class PokermonService {
     }
   }
 
-  findAll() {
-    return { message: 'This action adds a new pokermon' };
+  findAll(paginationDto: PaginationDTO) {
+
+    //Si no viene el limite le asignamos 10, si no viene offset le asignamos 0 (la posición inicial)
+    const {limit = 10, offset = 0} = paginationDto;
+    return this.pokemonModel.find()
+    .limit(limit)
+    .skip(offset)
+    .sort({no:1}) //le decimos que ordene la 'columna' no de mnera ascendente
+    .select('-__v') //el - al principio indica que no se incluya la columna '__v'
   }
 
   async findOne(term: string) {
