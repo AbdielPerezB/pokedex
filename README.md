@@ -26,3 +26,5 @@ docker compose up -d
 ## Docs de tecnologías:
 * [Servir contenido estático: serve-static](https://docs.nestjs.com/recipes/serve-static#configuration)
 * [MongoDB con NestJS](https://docs.nestjs.com/techniques/mongodb)
+* Class Validator y Class transformer `yarn add class-validator class-transformer`
+* [Axios](https://www.npmjs.com/package/@nestjs/axios) 
