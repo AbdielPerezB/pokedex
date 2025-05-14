@@ -5,6 +5,7 @@ import { PokeResponse } from './interfaces/poke-response.interface';
 import { Model } from 'mongoose';
 import { Pokemon } from 'src/pokemon/entities/pokemon.entity';
 import { InjectModel } from '@nestjs/mongoose';
+import { AxiosAdapter } from 'src/common/adapters/axios.adapter';
 
 
 @Injectable()
@@ -15,22 +16,15 @@ export class SeedService {
 
     //Otra manera de importar cosas es importar directo el Model de Mongoose
     @InjectModel(Pokemon.name)//Para que entienda que pokemonModel es un proveedor
-    private readonly pokemonModel: Model<Pokemon>
+    private readonly pokemonModel: Model<Pokemon>,
+    private readonly axiosAdapter: AxiosAdapter//Aquí usamos el AxiosAdapter
   ){}
   
    async executeSeed(num_pokemons: number){
 
-    //Borramos todos los datos existentes antes de insertar nuevos
     await this.pokemonModel.deleteMany({}); //delete * from pokemons
 
-    const {data} = await firstValueFrom(
-      this.httpservice.get<PokeResponse>(`https://pokeapi.co/api/v2/pokemon?limit=${num_pokemons}`)
-      .pipe(
-        catchError((error) => {
-          throw new HttpException(`Data not fetched from pokeapi. ${error}`,HttpStatus.INTERNAL_SERVER_ERROR)
-        }),
-      ),
-    );
+    const data = await this.axiosAdapter.get<PokeResponse>(`https://pokeapi.co/api/v2/pokemon?limit=${num_pokemons}`);
     /*VERSION CON MUCHAS INSERCIÓNES (No recomendada porque se hacen muchas 'consultas' a la db)---
     //Forma para agregar varias inserciones de golpe, de esta manera ya no tenemos que esperar al 
     //await a que cada inserción se haga una por una:
