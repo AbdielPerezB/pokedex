@@ -12,7 +12,7 @@ export class PokermonService {
   //Injectamos nuestro modelo de la tala de Mongo de Pokemon
   constructor(
     //Por si solo el pokemonModel no es un provider, 
-    //es me limita si quiero manejarlo más adelante,para
+    //esto me limita si quiero manejarlo más adelante,para
     //que sea un proveedor le agrego el decorador @InjecModel
     @InjectModel(Pokemon.name)
     private readonly pokemonModel: Model<Pokemon>
@@ -113,6 +113,4 @@ export class PokermonService {
     console.log(error);
     throw new InternalServerErrorException(`Can't create Pokemon - Check server logs`);
   }
-
-
 }
