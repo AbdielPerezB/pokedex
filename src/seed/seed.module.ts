@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SeedService } from './seed.service';
 import { SeedController } from './seed.controller';
-import { HttpModule } from '@nestjs/axios';
 import { PokermonModule } from 'src/pokemon/pokemon.module';
 import { CommonModule } from 'src/common/common.module';
 
@@ -9,10 +8,6 @@ import { CommonModule } from 'src/common/common.module';
   controllers: [SeedController],
   providers: [SeedService],
   imports: [
-    HttpModule.register({
-      timeout:5000,
-      maxRedirects:5
-    }),
     PokermonModule,
     CommonModule //Como queremos utilizar AxiosAdapter en seed.service.ts, tenemos que importar el módulo
                   //CommonMOdule completo, que es donde se exportó el AxiosAdapters. Todo esto es a nivel de módulo
