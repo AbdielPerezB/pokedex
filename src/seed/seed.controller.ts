@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { SeedService } from './seed.service';
 
 @Controller('seed')
@@ -8,11 +8,10 @@ export class SeedController {
   constructor(private readonly seedService: SeedService) { }
 
 
-  @Get()
+  @Get(':num_pokemons')
+  execute( @Param('num_pokemons', ParseIntPipe) num_pokemons: number ) {
 
-  execute() {
-
-    return this.seedService.executeSeed();
+    return this.seedService.executeSeed(num_pokemons);
 
   }
 }

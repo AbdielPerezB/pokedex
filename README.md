@@ -19,6 +19,11 @@ npm i -g @nestjs/cli
 docker compose up -d
 ```
 
+5. Reconstruir la db con semilla. En lugar de 10, colocar el numero de ejemplos a cargar en la db
+```
+127.0.0.1:3000/api/v2/seed/10
+```
+
 ## Stack usado
 * Mongo DB
 * Nest
@@ -27,4 +32,4 @@ docker compose up -d
 * [Servir contenido estático: serve-static](https://docs.nestjs.com/recipes/serve-static#configuration)
 * [MongoDB con NestJS](https://docs.nestjs.com/techniques/mongodb)
 * Class Validator y Class transformer `yarn add class-validator class-transformer`
-* [Axios](https://www.npmjs.com/package/@nestjs/axios) 
+* [Axios install](https://www.npmjs.com/package/@nestjs/axios), [Axios nest docs](https://docs.nestjs.com/techniques/http-module)
