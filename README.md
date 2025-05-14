@@ -33,3 +33,4 @@ docker compose up -d
 * [MongoDB con NestJS](https://docs.nestjs.com/techniques/mongodb)
 * Class Validator y Class transformer `yarn add class-validator class-transformer`
 * [Axios install](https://www.npmjs.com/package/@nestjs/axios), [Axios nest docs](https://docs.nestjs.com/techniques/http-module)
+* Para variables de entorno .env -> `yarn add @nestjs/config` o `npm i @nestjs/config`

@@ -17,7 +17,8 @@ export class PokermonService {
     //que sea un proveedor le agrego el decorador @InjecModel
     @InjectModel(Pokemon.name)
     private readonly pokemonModel: Model<Pokemon>
-  ) { }
+  ) { 
+  }
 
   //Se coloca async porque la conexión a la db son asíncronas
   async create(createPokermonDto: CreatePokermonDto) {
