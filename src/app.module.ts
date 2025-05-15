@@ -16,7 +16,7 @@ import { JoiValidationSchema } from './config/joi.validation';
       load: [EnvCOnfiguration],// le decimos donde está el archivo de mi mapeo de variales de entorno
       validationSchema: JoiValidationSchema //Es el schema de validación, trabaja en conjunto con EnvCOnfiguration
     }),//Para poder acceder a las variables de entorno del archivo .env. Siempre debe estar al principio para que todo lo de abajo pueda acceder a las variables de entoro
-      //a partir de ahora no leeremos dierecto del process.env, sino que utilizaremos el ConfigMOdule en nuestros Building blocks
+    //a partir de ahora no leeremos dierecto del process.env, sino que utilizaremos el ConfigMOdule en nuestros Building blocks
 
 
     //Documentación para todo lo relacionado a servir contenido estático: https://docs.nestjs.com/recipes/serve-static#configuration
@@ -26,16 +26,22 @@ import { JoiValidationSchema } from './config/joi.validation';
     }),
 
     //referencia a DB
-    MongooseModule.forRoot(process.env.MONGODB!), //EL signo de interrogación indica que la variable siempre va a estar definida
+    MongooseModule.forRoot(process.env.MONGODB!,
+      //Esto es cuando desplegamos una db a producción como en Raliway,
+      //Ya que ahí el nombre de la db no va en el url de la conexión, sino que se debe poner aquí
+      // {
+      //   dbName:'pokemonsdb'
+      // }
+    ),
     PokermonModule,
     CommonModule,
     SeedModule
   ],
   controllers: [],
-  providers:[],
+  providers: [],
 })
 export class AppModule {
   // constructor(){
   //   // console.log(process.env)
   // }
- }
+}
