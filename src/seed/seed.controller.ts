@@ -14,4 +14,9 @@ export class SeedController {
     return this.seedService.executeSeed(num_pokemons);
 
   }
+
+  @Get()
+  executeSeed(){
+    return this.seedService.executeSeedNoParams();
+  }
 }

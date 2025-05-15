@@ -1,14 +1,19 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { isValidObjectId, Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { ConfigService } from '@nestjs/config';
+
+import { isValidObjectId, Model } from 'mongoose';
+import { Pokemon } from './entities/pokemon.entity';
 
 import { CreatePokermonDto } from './dto/create-pokermon.dto';
 import { UpdatePokermonDto } from './dto/update-pokermon.dto';
-import { Pokemon } from './entities/pokemon.entity';
 import { PaginationDTO } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class PokermonService {
+
+  private readonly defaultLimit:number;
+  private readonly pokemonsToLoad: number;
 
   //Injectamos nuestro modelo de la tala de Mongo de Pokemon
   constructor(
@@ -16,8 +21,11 @@ export class PokermonService {
     //esto me limita si quiero manejarlo más adelante,para
     //que sea un proveedor le agrego el decorador @InjecModel
     @InjectModel(Pokemon.name)
-    private readonly pokemonModel: Model<Pokemon>
-  ) { 
+    private readonly pokemonModel: Model<Pokemon>,
+    private readonly configService: ConfigService //recuarda agregar el ConfigModule en el pokemon.module.ts
+
+  ) {
+    this.defaultLimit = this.configService.get<number>('DEFAULT_LIMIT') || 5;
   }
 
   //Se coloca async porque la conexión a la db son asíncronas
@@ -34,12 +42,12 @@ export class PokermonService {
   findAll(paginationDto: PaginationDTO) {
 
     //Si no viene el limite le asignamos 10, si no viene offset le asignamos 0 (la posición inicial)
-    const {limit = 10, offset = 0} = paginationDto;
+    const { limit = this.defaultLimit, offset = 0 } = paginationDto;
     return this.pokemonModel.find()
-    .limit(limit)
-    .skip(offset)
-    .sort({no:1}) //le decimos que ordene la 'columna' no de mnera ascendente
-    .select('-__v') //el - al principio indica que no se incluya la columna '__v'
+      .limit(limit)
+      .skip(offset)
+      .sort({ no: 1 }) //le decimos que ordene la 'columna' no de mnera ascendente
+      .select('-__v') //el - al principio indica que no se incluya la columna '__v'
   }
 
   async findOne(term: string) {
@@ -106,8 +114,8 @@ export class PokermonService {
       "deletedCount": 0
     }
     */
-  //  Por lo tanto, usamos desestructuración y utilizamos deletedCount a nuestro favor:
-    const { deletedCount } = await this.pokemonModel.deleteOne({_id: id});
+    //  Por lo tanto, usamos desestructuración y utilizamos deletedCount a nuestro favor:
+    const { deletedCount } = await this.pokemonModel.deleteOne({ _id: id });
     if (deletedCount === 0)
       throw new BadRequestException(`Pokemon with ${id} not found`)
     return;
