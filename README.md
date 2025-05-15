@@ -18,8 +18,16 @@ npm i -g @nestjs/cli
 ```
 docker compose up -d
 ```
+5. Clonar archivo __.env.template__ y renombrar la copia a __.env__
 
-5. Reconstruir la db con semilla. En lugar de 10, colocar el numero de ejemplos a cargar en la db
+6. Llenar las variables de entorno definidas en el __.env__
+
+7. Ejecutar la aplicación en dev:
+```
+yarn start:dev
+```
+
+7. Reconstruir la db con semilla. En lugar de 10, colocar el numero de ejemplos a cargar en la db
 ```
 127.0.0.1:3000/api/v2/seed/10
 ```
@@ -34,3 +42,4 @@ docker compose up -d
 * Class Validator y Class transformer `yarn add class-validator class-transformer`
 * [Axios install](https://www.npmjs.com/package/@nestjs/axios), [Axios nest docs](https://docs.nestjs.com/techniques/http-module)
 * Para variables de entorno .env -> `yarn add @nestjs/config` o `npm i @nestjs/config`
+* [joi](https://www.npmjs.com/package/joi) -> `yarn add joi`

@@ -8,11 +8,13 @@ import { CommonModule } from './common/common.module';
 import { SeedModule } from './seed/seed.module';
 import { join } from 'path';
 import { EnvCOnfiguration } from './config/app.config';
+import { JoiValidationSchema } from './config/joi.validation';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [EnvCOnfiguration]// le decimos donde está el archivo de mi mapeo de variales de entorno
+      load: [EnvCOnfiguration],// le decimos donde está el archivo de mi mapeo de variales de entorno
+      validationSchema: JoiValidationSchema //Es el schema de validación, trabaja en conjunto con EnvCOnfiguration
     }),//Para poder acceder a las variables de entorno del archivo .env. Siempre debe estar al principio para que todo lo de abajo pueda acceder a las variables de entoro
       //a partir de ahora no leeremos dierecto del process.env, sino que utilizaremos el ConfigMOdule en nuestros Building blocks
 

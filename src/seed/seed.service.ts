@@ -19,11 +19,12 @@ export class SeedService {
     private readonly axiosAdapter: AxiosAdapter,//Aquí usamos el AxiosAdapter
     private readonly confiService: ConfigService
   ){
-    this.pokemonsToLoad = confiService.get<number>('LIMIT_PKEMONS_TO_LOAD') || 10;
+    this.pokemonsToLoad = confiService.get<number>('pokemonsToLoad')!;
   }
 
   async executeSeedNoParams(){
     await this.pokemonModel.deleteMany({});
+    console.log({pokemons: this.pokemonsToLoad})
     const data = await this.axiosAdapter.get<PokeResponse>(`https://pokeapi.co/api/v2/pokemon?limit=${this.pokemonsToLoad}`);
 
     const pokemonsToInsert: {name: string; no: number}[] = [];

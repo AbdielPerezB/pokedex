@@ -25,7 +25,7 @@ export class PokermonService {
     private readonly configService: ConfigService //recuarda agregar el ConfigModule en el pokemon.module.ts
 
   ) {
-    this.defaultLimit = this.configService.get<number>('DEFAULT_LIMIT') || 5;
+    this.defaultLimit = this.configService.get<number>('default_limit')!;
   }
 
   //Se coloca async porque la conexión a la db son asíncronas
