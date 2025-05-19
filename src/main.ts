@@ -21,7 +21,7 @@ async function bootstrap() {
     })
   );
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(process.env.PORT!); //SImpre que desplegamos en la nube, AWS, por ejemplo, el proveedor se encargará de darnos ese puerto
   console.log( `App running on port ${process.env.PORT ?? 3000}`)
 }
 bootstrap();
