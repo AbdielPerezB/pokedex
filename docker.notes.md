@@ -4,6 +4,8 @@ Preparar imagen de Docker - Node App
 ## Build
 docker-compose -f docker-compose.prod.yaml --env-file .env.prod up --build
 
+NOta: el --build es para que construya todo el proyecto, si no hacemos ningún cambio o modificación al proyecto no es necesario agregar la etiqueta --build.
+
 ## Run
 docker-compose -f docker-compose.prod.yaml --env-file .env.prod up
 
